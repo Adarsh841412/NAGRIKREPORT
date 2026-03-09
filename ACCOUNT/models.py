@@ -7,9 +7,13 @@ class UserModel(AbstractUser):
     ROLE_CHOICES = (('citizen','Citizen'),('officer','Officer'),('admin','Admin'))
     
     role = models.CharField(max_length=10,choices=ROLE_CHOICES ,blank=False,null=False)
-    phone_number = models.IntegerField(blank=True , null= True)
     address = models.CharField(max_length=1000,blank=False,null=False)
     last_login = models.DateTimeField(auto_now=True,editable=False)
+    mobile_number = models.CharField(max_length=15, unique=True)
+    is_email_verified = models.BooleanField(default=False)
+    is_mobile_verified = models.BooleanField(default=False)
+    email_otp = models.CharField(max_length=6, null=True, blank=True)
+    mobile_otp = models.CharField(max_length=6, null=True, blank=True)
 
     class Meta:
         verbose_name = "UserModel"
