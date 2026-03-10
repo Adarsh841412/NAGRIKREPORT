@@ -1,0 +1,96 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Officer</title>
+
+<link rel="stylesheet" href="{% static 'account/css/officer.css' %}">
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Register Officer</h2>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="form-group">
+<label>Designation</label>
+
+<select name="designation" required>
+
+<option value="">Select Designation</option>
+
+<option value="commissioner">Commissioner</option>
+<option value="deputy_commissioner">Deputy Commissioner</option>
+<option value="municipal_officer">Municipal Officer</option>
+<option value="sanitation_officer">Sanitation Officer</option>
+<option value="health_officer">Health Officer</option>
+<option value="water_supply_officer">Water Supply Officer</option>
+<option value="electricity_officer">Electricity Officer</option>
+<option value="road_transport_officer">Road & Transport Officer</option>
+<option value="environment_officer">Environment Officer</option>
+<option value="fire_department_officer">Fire Department Officer</option>
+<option value="police_officer">Police Officer</option>
+<option value="traffic_officer">Traffic Officer</option>
+<option value="housing_officer">Housing Officer</option>
+<option value="public_works_officer">Public Works Officer</option>
+<option value="education_officer">Education Officer</option>
+<option value="it_officer">IT Officer</option>
+<option value="maintenance_officer">Maintenance Officer</option>
+<option value="waste_management_officer">Waste Management Officer</option>
+<option value="zonal_officer">Zonal Officer</option>
+<option value="ward_officer">Ward Officer</option>
+
+</select>
+</div>
+
+<div class="form-group">
+<label>Select User</label>
+
+<select name="user_id" required>
+
+<option value="">Select User</option>
+
+{% for user in users %}
+<option value="{{ user.id }}">
+    {{ user.username }} - {{ user.email }}
+</option>
+{% endfor %}
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+<label>Longitude</label>
+<input type="number" step="0.000001" name="lon" placeholder="Enter Longitude" required>
+</div>
+
+<div class="form-group">
+<label>Latitude</label>
+<input type="number" step="0.000001" name="lat" placeholder="Enter Latitude" required>
+</div>
+
+
+
+<div class="form-group">
+<label>Landmark</label>
+<input type="text" name="landmark" placeholder="Enter Landmark" required>
+</div>
+
+<button type="submit">Add Officer</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

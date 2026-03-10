@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nagrik Report</title>
+
+<link rel="stylesheet" href="{% static 'account/css/index.css'%}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Select Your Role</h2>
+
+    <form  method ="post">
+    {% csrf_token %}
+        <div class="role-option">
+            <input type="radio" name="role" id="citizen" value="citizen">
+            <label for="citizen">Citizen</label>
+        </div>
+
+        <div class="role-option">
+            <input type="radio" name="role" id="officer" value="officer">
+            <label for="officer">Officer</label>
+        </div>
+
+        <button type="submit">Continue</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

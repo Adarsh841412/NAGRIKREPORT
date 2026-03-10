@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect 
 from django.contrib.auth import login 
-from .models import UserModel 
+from .models import UserModel ,Officer 
 from django.contrib import messages
 from .utils import genereate_otp, verify_otp as check_otp
 from django.core.mail import send_mail 
 from django.conf import settings 
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+# from .indexform import IndexForm
 
 def register(request):
     if request.method == 'POST':
@@ -50,20 +52,20 @@ def verify_otp(request,user_id):
             user.email_otp = None 
             user.mobile_otp = None 
             user.save()
-            return redirect('home')
+            return redirect('login')
         else :
             return render(request,'account/verify_otp.html',{'error':'Invalid OTP'})
     return render(request, 'account/verify_otp.html')    
 
 
 
-def login(request):
+def login1(request):
      
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
-        user = authenticate(request,userame=username,password=password)
+        print(username,password)
+        user = authenticate(request,username=username,password=password)
         print(user)
         if user is not None :
             
@@ -77,10 +79,47 @@ def login(request):
 
 
 
+def officer(request):
+    
+    if request.method == "POST":
+
+        user_id = request.POST.get('user_id')
+        designation = request.POST.get('designation')
+        lon = request.POST.get('lon')
+        lat = request.POST.get('lat')
+        landmark = request.POST.get('landmark')
+
+        # get user object
+        user = UserModel.objects.get(id=user_id)
+
+        # create officer
+        Officer.objects.create(
+            user_id=user,
+            designation=designation,
+            lon=lon,
+            lat=lat,
+            landmark=landmark
+        )
+        return redirect('home')
+    
+    users = UserModel.objects.all() 
+    return render(request,'account/officer_create.html',{'users':users})
 
 
 
-
-
+@login_required(login_url='/login')
 def home(request):
     return HttpResponse("This is homepage ")
+
+
+def index(request):
+
+    if request.method=="POST":
+        person = request.POST.get('role') 
+        if person == "citizen":
+            return redirect('register')
+    return render(request,"account/index.html")    
+
+
+
+

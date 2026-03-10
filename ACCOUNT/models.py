@@ -21,6 +21,7 @@ class UserModel(AbstractUser):
 
 
 class Officer(models.Model):
+
     DESIGNATION_CHOICES = [
         ('commissioner', 'Commissioner'),
         ('deputy_commissioner', 'Deputy Commissioner'),
@@ -43,6 +44,7 @@ class Officer(models.Model):
         ('zonal_officer', 'Zonal Officer'),
         ('ward_officer', 'Ward Officer'),
     ]
+    
     user_id = models.OneToOneField(UserModel,on_delete=models.SET_NULL,null=True)
     designation = models.CharField(max_length=200,choices=DESIGNATION_CHOICES)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
