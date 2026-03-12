@@ -157,6 +157,8 @@ def verify_otp(request,user_id):
         {'error':error}
     )
 
+
+# * citizen login view 
 def login1(request):
      
     if request.method == 'POST':
@@ -164,7 +166,6 @@ def login1(request):
         password = request.POST.get('password')
         print(username,password)
         user = authenticate(request,username=username,password=password)
-        print(user)
         if user is not None :
             
             login(request,user)
@@ -174,12 +175,18 @@ def login1(request):
         
         
         else:
+            print("all set ")
             messages.error(request, 'Invalid username or password.')
             return render(request, 'account/login.html')
 
     return render(request,"account/login.html")
 
 from django.core.exceptions import ValidationError
+
+
+
+
+
 
 def officer(request):
 
@@ -303,17 +310,8 @@ def officer(request):
     )
 
 
-# here citizen login 
 
-@login_required(login_url='/citizenlogin/')
-def home(request):
-
-    if request.user.role != "citizen":
-        return redirect("officer_login")
-
-    return render(request,"account/citizen_dashboard.html")
-
-
+# here i decide registration of user or officer 
 def index(request):
 
     if request.method=="POST":
@@ -354,20 +352,37 @@ def Officerlogin(request):
                 messages.error(request,"You are not authorized as officer")
 
         else:
-
+            print("Afsdfdfsd")
             messages.error(request,"Invalid Username or Password")
+            return redirect('officer_login')
 
     
     return render(request,"account/officer_login.html")
 
 
-@login_required(login_url='/officer_login/')
+
+# * officer login come to this dashboard 
+@login_required(login_url='officer_login')
 def OfficerPage(request):
 
     if request.user.role != "officer":
         return redirect("login")
 
     return render(request,"account/officer_dashboard.html")
+
+
+
+# here citizen login  after come to this dasboard 
+
+@login_required(login_url='login')
+def citizen_dashboard(request):
+
+    if request.user.role != "citizen":
+        return redirect("officer_login")
+
+    return render(request,"account/citizen_dashboard.html")
+
+
 
 
 
@@ -387,3 +402,11 @@ def logout_view(request):
         return redirect("officer_login")
 
     return redirect("login")
+
+
+
+
+# * handle 404 error 
+
+def custom_page_not_found_view(request, exception=None):
+    return render(request, "account/404.html", {}, status=404)

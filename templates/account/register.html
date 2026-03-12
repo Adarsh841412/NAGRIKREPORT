@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Register</title>
 <link rel="stylesheet" href="{% static 'account/css/register.css' %}">
+
 </head>
 <body>
 
@@ -75,11 +76,25 @@ required>
     <div class="error">{{ errors.role.0 }}</div>
   {% endif %}
 </div>
-<br>
-<br>
+
 <!-- Submit -->
 <button type="submit">Register</button>
 
+<p class="extra">
+Already have an account?
+</p>
+
+<div class="login-options">
+
+<a href="{% url 'login' %}" class="citizen-login">
+Login as Citizen
+</a>
+
+<a href="{% url 'officer_login' %}" class="officer-login">
+Login as Officer
+</a>
+
+</div>
 </form>
 
 </div>

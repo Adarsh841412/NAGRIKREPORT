@@ -1,37 +1,88 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Nagrik Report</title>
 
-<link rel="stylesheet" href="{% static 'account/css/index.css'%}">
+<link rel="stylesheet" href="{% static 'account/css/index.css'%}?{% now 'U' %}">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 </head>
+
 <body>
+
+<!-- floating particles -->
+<div class="particles"></div>
 
 <div class="container">
 
-    <h2>Select Your Role</h2>
+<h1>Nagrik Report</h1>
 
-    <form  method ="post">
-    {% csrf_token %}
-        <div class="role-option">
-            <input type="radio" name="role" id="citizen" value="citizen">
-            <label for="citizen">Citizen</label>
-        </div>
+<p class="subtitle">
+Smart Citizen Complaint System
+</p>
 
-        <div class="role-option">
-            <input type="radio" name="role" id="officer" value="officer">
-            <label for="officer">Officer</label>
-        </div>
+<h3>Select Your Role</h3>
 
-        <button type="submit">Continue</button>
+<form method="post">
 
-    </form>
+{% csrf_token %}
+
+<label class="role-card">
+
+<input type="radio" name="role" value="citizen">
+
+<div class="card-content">
+
+<div class="icon">
+👤
+</div>
+
+<h4>Citizen</h4>
+
+<p>Register complaints & track progress</p>
+
+</div>
+
+</label>
+
+
+<label class="role-card">
+
+<input type="radio" name="role" value="officer">
+
+<div class="card-content">
+
+<div class="icon">
+🛡️
+</div>
+
+<h4>Officer</h4>
+
+<p>Manage and resolve complaints</p>
+
+</div>
+
+</label>
+
+<button type="submit">
+Continue →
+</button>
+
+<p class="footer">
+Digital Governance Platform 🚀
+</p>
+
+</form>
 
 </div>
 
 </body>
+
 </html>

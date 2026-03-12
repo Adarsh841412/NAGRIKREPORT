@@ -20,6 +20,13 @@
 <form method="POST" class="register-form">
 
 {% csrf_token %}
+{% if messages%}
+{% for message in messages %}
+  <p style="color:red; margin-bottom:15px;">
+     {{message}}
+   </p>
+{% endfor %}    
+{% endif %} 
 
 <h2>Citizen Login</h2>
 

@@ -1,25 +1,90 @@
 <!DOCTYPE html>
-<html>
+{% load static %}
+<html lang="en">
 
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Citizen Dashboard</title>
+
+<link rel="stylesheet" href="{% static 'account/css/dashboard.css' %}">
+
 </head>
 
 <body>
 
-<h1>Citizen Dashboard</h1>
+<div class="dashboard">
 
-<p>Welcome {{request.user.username}}</p>
+    <div class="navbar">
 
-<a href="#">Create Complaint</a>
+        <h2>Nagrik Report</h2>
 
-<br><br>
+        <div class="nav-right">
 
-<a href="#">My Complaints</a>
+            <span>
+                Welcome <b>{{request.user.username}}</b>
+            </span>
 
-<br><br>
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
 
-<a href="{% url 'login' %}">Logout</a>
+        </div>
+
+    </div>
+
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>Create Complaint</h3>
+
+            <p>
+                Report a civic issue in your area
+            </p>
+
+            <a href="#" class="btn">
+                Create
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>My Complaints</h3>
+
+            <p>
+                Track status of your complaints
+            </p>
+
+            <a href="#" class="btn">
+                View
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Profile</h3>
+
+            <p>
+                View and update your details
+            </p>
+
+            <a href="#" class="btn">
+                Profile
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 
