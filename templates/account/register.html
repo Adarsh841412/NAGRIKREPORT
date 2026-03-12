@@ -2,25 +2,86 @@
 {% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <link rel="stylesheet" href="{% static 'account/css/register.css' %}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+<link rel="stylesheet" href="{% static 'account/css/register.css' %}">
 </head>
 <body>
 
 <div class="container">
-    <form method="post" class="register-form">
-        {% csrf_token %}
-        <h2>Create Account</h2>
 
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="email" name="email" placeholder="Email Address" required>
-        <input type="text" name="mobile_number" placeholder="Mobile Number" required>
-        <input type="password" name="password" placeholder="Password" required>
+<form method="post" class="register-form">
+{% csrf_token %}
 
-        <button type="submit">Register</button>
-    </form>
+<h2>Create Account</h2>
+
+{% if errors %}
+<div class="error-box">
+Please fix the errors below
+</div>
+{% endif %}
+
+<!-- Username -->
+<input type="text"
+name="username"
+placeholder="Username"
+value="{{ request.POST.username }}"
+class="{% if errors.username %}input-error{% endif %}"
+required>
+{% if errors.username %}
+<div class="error">{{ errors.username.0 }}</div>
+{% endif %}
+
+<!-- Email -->
+<input type="email"
+name="email"
+placeholder="Email Address"
+value="{{ request.POST.email }}"
+class="{% if errors.email %}input-error{% endif %}"
+required>
+{% if errors.email %}
+<div class="error">{{ errors.email.0 }}</div>
+{% endif %}
+
+<!-- Mobile Number -->
+<input type="text"
+name="mobile_number"
+placeholder="Mobile Number"
+value="{{ request.POST.mobile_number }}"
+class="{% if errors.mobile_number %}input-error{% endif %}"
+required>
+{% if errors.mobile_number %}
+<div class="error">{{ errors.mobile_number.0 }}</div>
+{% endif %}
+
+<!-- Password -->
+<input type="password"
+name="password"
+placeholder="Password"
+class="{% if errors.password %}input-error{% endif %}"
+required>
+{% if errors.password %}
+<div class="error">{{ errors.password.0 }}</div>
+{% endif %}
+<div class="role-group">
+  <label for="role">Select Role</label>
+  <select name="role" id="role" required class="{% if errors.role %}input-error{% endif %}">
+    <option value="">-- Choose Role --</option>
+    <option value="citizen" {% if request.POST.role == "citizen" %}selected{% endif %}>Citizen</option>
+    <option value="officer" {% if request.POST.role == "officer" %}selected{% endif %}>Officer</option>
+  </select>
+  {% if errors.role %}
+    <div class="error">{{ errors.role.0 }}</div>
+  {% endif %}
+</div>
+<br>
+<br>
+<!-- Submit -->
+<button type="submit">Register</button>
+
+</form>
+
 </div>
 
 </body>

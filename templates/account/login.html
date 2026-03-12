@@ -1,44 +1,72 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
 
-    <link rel="stylesheet" href="{% static 'account/css/register.css' %}">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Citizen Login</title>
+
+<link rel="stylesheet" href="{% static 'account/css/login.css' %}">
+
 </head>
 
 <body>
 
 <div class="container">
 
-    <form method="POST" class="register-form">
-        {% csrf_token %}
+<form method="POST" class="register-form">
 
-        <h2>Login</h2>
+{% csrf_token %}
 
-        <input 
-            type="text" 
-            name="username" 
-            placeholder="Enter Username"
-            required
-        >
+<h2>Citizen Login</h2>
 
-        <input 
-            type="password" 
-            name="password" 
-            placeholder="Enter Password"
-            required
-        >
+<p class="subtitle">
+Access your Nagrik Report dashboard
+</p>
 
-        <button type="submit">
-            Login
-        </button>
+<input 
+type="text" 
+name="username" 
+placeholder="Enter Username"
+required
+>
 
-    </form>
+<input 
+type="password" 
+name="password" 
+placeholder="Enter Password"
+required
+>
+
+<button type="submit">
+
+Login
+
+</button>
+
+<p class="extra">
+
+Don't have account?
+
+<a href="{% url 'register' %}">
+Register here
+</a>
+
+</p>
+
+<a href="{% url 'officer_login' %}" class="officer-link">
+
+Officer Login →
+
+</a>
+
+</form>
 
 </div>
 
 </body>
+
 </html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Officer Dashboard</title>
+
+<link rel="stylesheet" href="{% static 'account/css/dashboard.css' %}">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <div class="navbar">
+
+        <h2>Nagrik Report</h2>
+
+        <div class="nav-right">
+
+            <span>
+                Welcome Officer <b>{{request.user.username}}</b>
+            </span>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="cards">
+
+        <div class="card">
+
+            <h3>View Complaints</h3>
+
+            <p>
+                See complaints assigned to your department
+            </p>
+
+            <a href="#" class="btn">
+                Open
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Update Status</h3>
+
+            <p>
+                Change complaint progress and resolution
+            </p>
+
+            <a href="#" class="btn">
+                Update
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Profile</h3>
+
+            <p>
+                View your officer details
+            </p>
+
+            <a href="#" class="btn">
+                View
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

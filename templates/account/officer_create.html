@@ -3,13 +3,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Add Officer</title>
 
 <link rel="stylesheet" href="{% static 'account/css/officer.css' %}">
 
+<style>
+
+.error{
+color:red;
+font-size:13px;
+margin-top:5px;
+}
+
+</style>
+
 </head>
+
 <body>
 
 <div class="container">
@@ -21,9 +35,10 @@
 {% csrf_token %}
 
 <div class="form-group">
+
 <label>Designation</label>
 
-<select name="designation" required>
+<select name="designation">
 
 <option value="">Select Designation</option>
 
@@ -49,48 +64,115 @@
 <option value="ward_officer">Ward Officer</option>
 
 </select>
+
+{% if errors.designation %}
+<div class="error">
+{{ errors.designation }}
+</div>
+{% endif %}
+
 </div>
 
+
 <div class="form-group">
+
 <label>Select User</label>
 
-<select name="user_id" required>
+<select name="user_id">
 
 <option value="">Select User</option>
 
 {% for user in users %}
+
 <option value="{{ user.id }}">
-    {{ user.username }} - {{ user.email }}
+{{ user.username }} - {{ user.email }}
 </option>
+
 {% endfor %}
 
 </select>
 
+{% if errors.user %}
+<div class="error">
+{{ errors.user }}
+</div>
+{% endif %}
+
 </div>
 
 
 <div class="form-group">
+
 <label>Longitude</label>
-<input type="number" step="0.000001" name="lon" placeholder="Enter Longitude" required>
+
+<input type="number"
+step="0.000001"
+name="lon"
+placeholder="Enter Longitude">
+
+{% if errors.lon %}
+<div class="error">
+{{ errors.lon }}
+</div>
+{% endif %}
+
 </div>
 
+
 <div class="form-group">
+
 <label>Latitude</label>
-<input type="number" step="0.000001" name="lat" placeholder="Enter Latitude" required>
-</div>
 
+<input type="number"
+step="0.000001"
+name="lat"
+placeholder="Enter Latitude">
+
+{% if errors.lat %}
+<div class="error">
+{{ errors.lat }}
+</div>
+{% endif %}
+
+</div>
 
 
 <div class="form-group">
+
 <label>Landmark</label>
-<input type="text" name="landmark" placeholder="Enter Landmark" required>
+
+<input type="text"
+name="landmark"
+placeholder="Enter Landmark">
+
+{% if errors.landmark %}
+<div class="error">
+{{ errors.landmark }}
+</div>
+{% endif %}
+
 </div>
 
-<button type="submit">Add Officer</button>
+
+{% if errors.location %}
+
+<div class="error">
+{{ errors.location }}
+</div>
+
+{% endif %}
+
+
+<button type="submit">
+
+Add Officer
+
+</button>
 
 </form>
 
 </div>
 
 </body>
+
 </html>

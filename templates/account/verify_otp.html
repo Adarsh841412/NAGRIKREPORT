@@ -1,17 +1,22 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{%static 'account/css/verify_otp.css' %}">
 </head>
 <body>
     
+
 <form method="post" >
     {% csrf_token %}
     <input type="text" name="email_otp" placeholder="Email OTP" required>
     <button type="submit">Verify OTP</button>
 </form>
+
 
 </body>
 </html>

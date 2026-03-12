@@ -1,49 +1,44 @@
+/* Global styles */
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body{
-    height:100vh;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    background: linear-gradient(135deg,#1e3c72,#2a5298,#6dd5ed);
+    background:linear-gradient(135deg,#1e3c72,#2a5298,#6dd5ed);
     background-size:400% 400%;
-    animation: gradientMove 10s ease infinite;
+    animation:gradientMove 10s ease infinite;
 }
 
-/* Background animation */
 @keyframes gradientMove{
     0%{background-position:0% 50%;}
     50%{background-position:100% 50%;}
     100%{background-position:0% 50%;}
 }
 
+/* Container */
 .container{
     width:360px;
 }
 
+/* Form Card */
 .register-form{
     background:white;
     padding:40px;
     border-radius:12px;
     box-shadow:0 15px 40px rgba(0,0,0,0.2);
-    animation: floatCard 2s ease;
+    animation:floatCard 0.6s ease;
 }
 
-/* card entrance animation */
 @keyframes floatCard{
-    from{
-        transform: translateY(40px);
-        opacity:0;
-    }
-    to{
-        transform: translateY(0);
-        opacity:1;
-    }
+    from{transform:translateY(40px); opacity:0;}
+    to{transform:translateY(0); opacity:1;}
 }
 
 .register-form h2{
@@ -53,21 +48,52 @@ body{
     font-weight:600;
 }
 
-/* Inputs */
-.register-form input{
+/* Text inputs only (exclude radio) */
+.register-form input:not([type="radio"]){
     width:100%;
     padding:12px;
     margin-bottom:18px;
     border-radius:6px;
     border:1px solid #ddd;
     font-size:14px;
-    transition: all 0.3s ease;
+    transition:0.3s;
 }
 
-.register-form input:focus{
+.register-form input:focus:not([type="radio"]){
     border-color:#2a5298;
     box-shadow:0 0 8px rgba(42,82,152,0.4);
     outline:none;
+}
+
+/* Error text */
+.error{
+    color:#d93025;
+    font-size:13px;
+    margin-top:-12px;
+    margin-bottom:12px;
+}
+
+/* Error box */
+.error-box{
+    background:#ffeaea;
+    color:#d93025;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:15px;
+    text-align:center;
+    font-size:14px;
+    border:1px solid #ffcaca;
+}
+
+/* Input error highlight */
+.register-form input.input-error{
+    border:2px solid #d93025 !important;
+    background:#fff5f5 !important;
+}
+
+.register-form input.input-error:focus{
+    border-color:#d93025 !important;
+    box-shadow:0 0 6px rgba(217,48,37,0.4);
 }
 
 /* Button */
@@ -76,12 +102,12 @@ body{
     padding:12px;
     border:none;
     border-radius:6px;
-    background: linear-gradient(135deg,#ff7e5f,#feb47b);
+    background:linear-gradient(135deg,#ff7e5f,#feb47b);
     color:white;
     font-size:16px;
     font-weight:600;
     cursor:pointer;
-    transition: all 0.3s ease;
+    transition:0.3s;
 }
 
 .register-form button:hover{
@@ -89,7 +115,130 @@ body{
     box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
-/* Button click animation */
 .register-form button:active{
     transform:scale(0.97);
+}
+
+/* Mobile responsive */
+@media(max-width:420px){
+    .container{
+        width:95%;
+    }
+    .register-form{
+        padding:25px;
+    }
+}
+.role-card input[type="radio"] {
+  display: none;
+}
+
+.role-card span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+}
+
+.role-card {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.role-card input[type="radio"]:checked + span {
+  color: #fff;
+  font-weight: 600;
+}
+
+.role-card input[type="radio"]:checked {
+  background: linear-gradient(135deg,#1e3c72,#6dd5ed);
+  border-color: #2a5298;
+  color: #fff;
+}
+
+.role-card:hover {
+  border-color: #2a5298;
+  background: rgba(42,82,152,0.1);
+}
+
+
+
+
+
+.subtitle{
+
+margin-bottom:25px;
+
+font-size:14px;
+
+color:#666;
+
+}
+
+.extra{
+
+margin-top:15px;
+
+font-size:14px;
+
+}
+
+.extra a{
+
+color:#2a5298;
+
+text-decoration:none;
+
+font-weight:500;
+
+}
+
+.extra a:hover{
+
+text-decoration:underline;
+
+}
+
+.officer-link{
+
+display:block;
+
+margin-top:15px;
+
+font-size:14px;
+
+text-decoration:none;
+
+color:#e67e22;
+
+font-weight:500;
+
+}
+
+.officer-link:hover{
+
+text-decoration:underline;
+
+}
+
+button{
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 20px rgba(0,0,0,.2);
+
 }

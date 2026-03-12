@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Select Role</title>
+
+<link rel="stylesheet" href="{% static 'account/css/index1.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Nagrik Report</h1>
+
+<h2>Select Login Type</h2>
+
+<div class="card-container">
+
+<a href="{% url 'login' %}" class="card citizen">
+
+<h3>Citizen Login</h3>
+
+<p>Report civic issues and track complaints</p>
+
+</a>
+
+<a href="{% url 'officer_login' %}" class="card officer">
+
+<h3>Officer Login</h3>
+
+<p>Manage and resolve complaints</p>
+
+</a>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
