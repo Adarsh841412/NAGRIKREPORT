@@ -9,7 +9,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 import re
 from django.utils import timezone
-
+from DEPARTMENT.models import Department
 
 
 class UserModel(AbstractUser):
@@ -79,7 +79,13 @@ class Officer(models.Model):
         UserModel,
         on_delete=models.CASCADE
     )
-
+    department = models.ForeignKey(
+    "DEPARTMENT.Department",
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name="officers"
+)
     designation = models.CharField(max_length=100)
 
     lon = models.FloatField()
@@ -119,4 +125,4 @@ class Officer(models.Model):
         super().save(*args,**kwargs)
 
     def __str__(self):
-        return self.user_id.name
+        return self.user_id.username
