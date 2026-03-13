@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Complaint</title>
+<link rel="stylesheet" href="{% static 'complaint/css/create_complaint.css' %}?{% now 'U' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <form method="POST" enctype="multipart/form-data" class="complaint-form">
+        {% csrf_token %}
+
+        <h2>Create Complaint</h2>
+        <p class="subtitle">Report an issue in your area</p>
+
+        {% if errors.general %}
+        <div class="error-box">
+            {{ errors.general }}
+        </div>
+        {% endif %}
+
+        <select name="category" class="{% if errors.category %}input-error{% endif %}">
+            <option value="">Select Category</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if request.POST.category == category.id|stringformat:"s" %}selected{% endif %}>
+                {{ category.category_name }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if errors.category %}
+        <div class="error">{{ errors.category }}</div>
+        {% endif %}
+
+        <input
+            type="text"
+            name="title"
+            placeholder="Complaint Title"
+            value="{{ request.POST.title }}"
+            class="{% if errors.title %}input-error{% endif %}"
+        >
+        {% if errors.title %}
+        <div class="error">{{ errors.title }}</div>
+        {% endif %}
+
+        <textarea
+            name="description"
+            placeholder="Describe the issue"
+            class="{% if errors.description %}input-error{% endif %}"
+        >{{ request.POST.description }}</textarea>
+        {% if errors.description %}
+        <div class="error">{{ errors.description }}</div>
+        {% endif %}
+
+        <input
+            type="text"
+            name="location_address"
+            placeholder="Location Address"
+            value="{{ request.POST.location_address }}"
+            class="{% if errors.location_address %}input-error{% endif %}"
+        >
+        {% if errors.location_address %}
+        <div class="error">{{ errors.location_address }}</div>
+        {% endif %}
+
+        <input
+            type="text"
+            name="latitude"
+            placeholder="Latitude"
+            value="{{ request.POST.latitude }}"
+            class="{% if errors.latitude %}input-error{% endif %}"
+        >
+        {% if errors.latitude %}
+        <div class="error">{{ errors.latitude }}</div>
+        {% endif %}
+
+        <input
+            type="text"
+            name="longitude"
+            placeholder="Longitude"
+            value="{{ request.POST.longitude }}"
+            class="{% if errors.longitude %}input-error{% endif %}"
+        >
+        {% if errors.longitude %}
+        <div class="error">{{ errors.longitude }}</div>
+        {% endif %}
+
+        <select name="priority" class="{% if errors.priority %}input-error{% endif %}">
+            <option value="">Select Priority</option>
+            <option value="low" {% if request.POST.priority == "low" %}selected{% endif %}>Low</option>
+            <option value="medium" {% if request.POST.priority == "medium" %}selected{% endif %}>Medium</option>
+            <option value="high" {% if request.POST.priority == "high" %}selected{% endif %}>High</option>
+        </select>
+        {% if errors.priority %}
+        <div class="error">{{ errors.priority }}</div>
+        {% endif %}
+
+        <label class="file-label">Upload Image / Video</label>
+        <input
+            type="file"
+            name="media_files"
+            multiple
+            accept="image/*,video/*"
+            class="{% if errors.media_files %}input-error{% endif %}"
+        >
+        {% if errors.media_files %}
+        <div class="error">{{ errors.media_files }}</div>
+        {% endif %}
+
+        <button type="submit">Submit Complaint</button>
+
+        <a href="{% url 'home' %}" class="back-link">← Back to Dashboard</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

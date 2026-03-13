@@ -5,6 +5,7 @@ from django.core.validators import (
 )
 
 
+
 class Department(models.Model):
 
     DEPARTMENT_CHOICES = [
