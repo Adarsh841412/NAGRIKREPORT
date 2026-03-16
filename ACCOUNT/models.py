@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 import re
 from django.utils import timezone
 from DEPARTMENT.models import Department
-
+from cloudinary.models import CloudinaryField
 
 class UserModel(AbstractUser):
 
@@ -30,9 +30,8 @@ class UserModel(AbstractUser):
 
     email_otp = models.CharField(max_length=6,null=True,blank=True)
     mobile_otp = models.CharField(max_length=6,null=True,blank=True)
-
     otp_created_at = models.DateTimeField(null=True,blank=True)
-
+    profile_picture = CloudinaryField('profile_picture',blank=True,null=True)
     def clean(self):
 
         errors = {}
@@ -70,6 +69,7 @@ class UserModel(AbstractUser):
 
     class Meta:
         verbose_name = "UserModel"
+
 
 
 

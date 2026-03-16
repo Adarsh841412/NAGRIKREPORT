@@ -23,7 +23,7 @@ def register(request):
         mobile_number = request.POST.get('mobile_number')
         password = request.POST.get('password')
         role = request.POST.get('role')
-
+        profile_picture = request.FILES.get('profile_picture')
         # Username exists check
         if UserModel.objects.filter(username=username).exists():
             errors['username'] = ["Username already exists"]
@@ -61,7 +61,8 @@ def register(request):
                 email=email,
                 mobile_number=mobile_number,
                 password=password,
-                role=role
+                role=role,
+                profile_picture = profile_picture
             )
 
             email_otp = genereate_otp()
@@ -324,12 +325,12 @@ def index(request):
 
 
 
-# here i select role for login 
+#* here i select role for login 
 def select_role(request):
     return render(request,"account/index1.html")
 
 
-# this is a page where officer will login 
+#* this is a page where officer will login 
 def Officerlogin(request):
 
     if request.method == "POST":
@@ -406,7 +407,107 @@ def logout_view(request):
 
 
 
+
+
+
+# * making user profile page 
+
+def user_profile(request):
+   if request.user.is_authenticated:
+    # user = UserModel.objects.get(id=request.user.id)
+    # print("jlkfdsasd",user.profile_picture.url)
+    return render(request,'account/user_profile.html',{'user_data':request.user})
+
+
+# * edit profile citizen 
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import UserModel
+
+
+@login_required(login_url='login')
+def edit_profile_citizen(request):
+
+    errors = {}
+    user = request.user
+
+    if request.method == "POST":
+
+        profile_picture = request.FILES.get('profile_picture')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        mobile_number = request.POST.get('mobile_number')
+        # address = request.POST.get('address')
+
+        # Username validation
+        if not username or len(username.strip()) < 3:
+            errors['username'] = ["Username must be at least 3 characters long."]
+        elif UserModel.objects.exclude(id=user.id).filter(username=username).exists():
+            errors['username'] = ["Username already exists."]
+
+        # Email validation
+        if not email:
+            errors['email'] = ["Email is required."]
+        elif UserModel.objects.exclude(id=user.id).filter(email=email).exists():
+            errors['email'] = ["Email already registered."]
+
+        # Mobile validation
+        if not mobile_number:
+            errors['mobile_number'] = ["Mobile number is required."]
+        elif not mobile_number.isdigit():
+            errors['mobile_number'] = ["Mobile number must contain digits only."]
+        elif len(mobile_number) != 10:
+            errors['mobile_number'] = ["Mobile number must be exactly 10 digits."]
+        elif UserModel.objects.exclude(id=user.id).filter(mobile_number=mobile_number).exists():
+            errors['mobile_number'] = ["Mobile number already registered."]
+
+        # # Address validation
+        # if address and len(address.strip()) < 5:
+        #     errors['address'] = ["Address must be at least 5 characters long."]
+
+        if errors:
+            return render(
+                request,
+                "account/edit_profile_citizen.html",
+                {
+                    "errors": errors
+                }
+            )
+
+        user.username = username.strip()
+        user.email = email.strip()
+        user.mobile_number = mobile_number.strip()
+        # user.address = address.strip() if address else ""
+
+        if profile_picture:
+            user.profile_picture = profile_picture
+
+        user.save()
+        return redirect('user_profile')
+
+    return render(
+        request,
+        "account/edit_profile_citizen.html",
+        {
+            "errors": errors
+        }
+    )
+
+
+
+
+
+
+
 # * handle 404 error 
 
+
 def custom_page_not_found_view(request, exception=None):
+
+
     return render(request, "account/404.html", {}, status=404)
+
+
+

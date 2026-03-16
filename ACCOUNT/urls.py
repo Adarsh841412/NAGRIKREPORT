@@ -13,7 +13,9 @@ urlpatterns = [
     path('select-role/',views.select_role,name="select_role"),
     path('oficerlogin/',views.Officerlogin,name="officer_login"),
     path('officerpage/',views.OfficerPage,name="officer_page"),
-    path("logout/",views.logout_view,name="logout")
+    path("logout/",views.logout_view,name="logout"),
+    path("user_profile/",views.user_profile,name="user_profile"),
+    path("edit-profile/", views.edit_profile_citizen, name="edit_profile_citizen"),
 
 
 ]

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="{% static 'account/css/edit_profile_citizen.css' %}?{% now 'U' %}">
+</head>
+<body>
+
+    <div class="profile-container">
+
+        <div class="profile-card">
+
+            <div class="top-section">
+                <a href="{% url 'user_profile' %}" class="back-btn">← Back</a>
+                <h1>Edit Profile</h1>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" class="edit-form">
+                {% csrf_token %}
+
+                {% if errors %}
+                <div class="error-box">
+                    Please fix the errors below
+                </div>
+                {% endif %}
+
+                <div class="profile-image-section">
+                    {% if request.user.profile_picture %}
+                        <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+                    {% else %}
+                        <div class="default-avatar">
+                            {{ request.user.username|first|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="profile_picture">Update Profile Picture</label>
+                    <input type="file" name="profile_picture" id="profile_picture" accept="image/*">
+                    {% if errors.profile_picture %}
+                        <div class="error">{{ errors.profile_picture.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            id="username"
+                            value="{{ request.POST.username|default:request.user.username }}"
+                            class="{% if errors.username %}input-error{% endif %}"
+                            required
+                        >
+                        {% if errors.username %}
+                            <div class="error">{{ errors.username.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            value="{{ request.POST.email|default:request.user.email }}"
+                            class="{% if errors.email %}input-error{% endif %}"
+                            required
+                        >
+                        {% if errors.email %}
+                            <div class="error">{{ errors.email.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobile_number">Mobile Number</label>
+                        <input
+                            type="text"
+                            name="mobile_number"
+                            id="mobile_number"
+                            value="{{ request.POST.mobile_number|default:request.user.mobile_number }}"
+                            class="{% if errors.mobile_number %}input-error{% endif %}"
+                            required
+                        >
+                        {% if errors.mobile_number %}
+                            <div class="error">{{ errors.mobile_number.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% comment %} <div class="form-group full-width">
+                        <label for="address">Address</label>
+                        <textarea
+                            name="address"
+                            id="address"
+                            rows="4"
+                            class="{% if errors.address %}input-error{% endif %}"
+                            placeholder="Enter your address"
+                        >{{ request.POST.address|default:request.user.address }}</textarea>
+                        {% if errors.address %}
+                            <div class="error">{{ errors.address.0 }}</div>
+                        {% endif %}
+                    </div> {% endcomment %}
+
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" value="{{ request.user.role|title }}" readonly class="readonly-field">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Verified</label>
+                        <input
+                            type="text"
+                            value="{% if request.user.is_email_verified %}Yes{% else %}No{% endif %}"
+                            readonly
+                            class="readonly-field"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Verified</label>
+                        <input
+                            type="text"
+                            value="{% if request.user.is_mobile_verified %}Yes{% else %}No{% endif %}"
+                            readonly
+                            class="readonly-field"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="action-buttons">
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

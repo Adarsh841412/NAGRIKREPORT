@@ -12,7 +12,8 @@
 
 <div class="container">
 
-<form method="post" class="register-form">
+<form method="post" enctype="multipart/form-data" class="register-form">
+
 {% csrf_token %}
 
 <h2>Create Account</h2>
@@ -65,6 +66,25 @@ required>
 {% if errors.password %}
 <div class="error">{{ errors.password.0 }}</div>
 {% endif %}
+
+
+<label for="profile_picture">Profile Picture</label>
+
+<input
+type="file"
+name="profile_picture"
+accept="image/*"
+class="{% if errors.profile_picture %}input-error{% endif %}"
+>
+
+{% if errors.profile_picture %}
+<div class="error">{{ errors.profile_picture.0 }}</div>
+{% endif %}
+
+
+
+
+
 <div class="role-group">
   <label for="role">Select Role</label>
   <select name="role" id="role" required class="{% if errors.role %}input-error{% endif %}">
@@ -101,3 +121,17 @@ Login as Officer
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

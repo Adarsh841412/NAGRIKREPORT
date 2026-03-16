@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{% static 'account/css/user_profile.css' %}?{% now 'U' %}">
+</head>
+
+<body>
+
+    <div class="profile-container">
+
+        <div class="profile-card">
+
+            <div class="top-section">
+                <a href="{% url 'home' %}" class="back-btn">← Back</a>
+                <h1>User Profile</h1>
+            </div>
+
+            <div class="profile-image-section">
+                {% if user_data.profile_picture %}
+                <img src="{{ user_data.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+                {% else %}
+                <div class="default-avatar">
+                    {{ user_data.username|first|upper }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-info">
+
+                <div class="info-box">
+                    <span class="label">Username</span>
+                    <span class="value">{{ user_data.username }}</span>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Email</span>
+                    <span class="value">{{ user_data.email }}</span>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Mobile Number</span>
+                    <span class="value">{{ user_data.mobile_number }}</span>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Role</span>
+                    <span class="value">{{ user_data.role|title }}</span>
+                </div>
+
+                <!-- <div class="info-box">
+                    <span class="label">Address</span>
+                    <span class="value">
+                        {% if user_data.address %}
+                            {{ user_data.address }}
+                        {% else %}
+                            Not added yet
+                        {% endif %}
+                    </span>
+                </div> -->
+
+                <div class="info-box">
+                    <span class="label">Email Verified</span>
+                    <span class="value">
+                        {% if user_data.is_email_verified %}
+                        <span class="verified yes">Yes</span>
+                        {% else %}
+                        <span class="verified no">No</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="info-box">
+                    <span class="label">Mobile Verified</span>
+                    <span class="value">
+                        {% if user_data.is_mobile_verified %}
+                        <span class="verified yes">Yes</span>
+                        {% else %}
+                        <span class="verified no">No</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="{% url 'edit_profile_citizen' %}" class="edit-btn">Edit Profile</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
