@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Dashboard - Complaints</title>
+    <link rel="stylesheet" href="{% static 'complaint/css/view_complaints.css' %}">
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div class="top-bar">
+            <div>
+                <h2 class="page-title">Complaint Details</h2>
+                <p class="page-subtitle">Manage and review assigned complaints efficiently</p>
+            </div>
+            <a href="{% url 'officer_page' %}" class="back-btn">← Back to Dashboard</a>
+        </div>
+
+        {% if complaints %}
+            {% for complaint in complaints %}
+            <div class="complaint-card">
+
+                <div class="card-header">
+                    <div class="title-section">
+                        <h3>{{ complaint.title }}</h3>
+                        <p class="complaint-id">Complaint ID: #{{ complaint.id }}</p>
+                    </div>
+
+                    <span class="status-badge {{ complaint.status|lower }}">
+                        {{ complaint.get_status_display }}
+                    </span>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-line">
+                        <div class="progress-fill 
+                            {% if complaint.status == 'pending' %}pending-fill
+                            {% elif complaint.status == 'in_progress' %}progress-fill
+                            {% elif complaint.status == 'resolved' %}resolved-fill
+                            {% else %}pending-fill{% endif %}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="description-box">
+                    <h4>Description</h4>
+                    <p class="description">{{ complaint.description }}</p>
+                </div>
+
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="label">📂 Category</span>
+                        <span class="value">{{ complaint.category.category_name }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="label">👤 Citizen</span>
+                        <span class="value">{{ complaint.user.username }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="label">📍 Location</span>
+                        <span class="value">{{ complaint.location_address }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="label">🔥 Priority</span>
+                        <span class="value priority {{ complaint.priority|lower }}">
+                            {{ complaint.priority|title }}
+                        </span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="label">🕒 Created</span>
+                        <span class="value">{{ complaint.created_at }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="label">📌 Status</span>
+                        <span class="value">{{ complaint.get_status_display }}</span>
+                    </div>
+                </div>
+
+                {% if complaint.media_files.exists %}
+<div class="media">
+
+    {% for media in complaint.media_files.all %}
+
+        {% if media.media_type == "image" %}
+            <img src="{{ media.media_file.url }}" class="media-img">
+
+        {% elif media.media_type == "video" %}
+            <video controls class="media-video">
+                <source src="{{ media.media_file.url }}">
+                Your browser does not support video.
+            </video>
+        {% endif %}
+
+    {% endfor %}
+
+</div>
+{% endif %}
+
+                <div class="actions">
+                    <button class="btn start">Start</button>
+                    <button class="btn progress">In Progress</button>
+                    <button class="btn resolve">Resolve</button>
+                    <button class="btn reject">Reject</button>
+                </div>
+
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data-box">
+                <h3>No complaints assigned yet 🚫</h3>
+                <p>There are currently no complaints assigned to you.</p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+</body>
+</html>

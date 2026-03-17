@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.contrib import messages
-
+from .models import Complaint
+from ACCOUNT.models import Officer
 from .models import Complaint, ComplaintMedia
 from DEPARTMENT.models import Category
 
@@ -145,4 +146,37 @@ def my_complaints(request):
         {
             "complaints": complaints
         }
+    )
+
+
+
+
+# from django.shortcuts import render, redirect
+# from django.contrib import messages
+# from django.contrib.auth.decorators import login_required
+# from ACCOUNT.models import Officer
+# from .models import Complaint
+
+
+@login_required(login_url="login")
+def view_complaint_officer(request):
+
+    if request.user.role != "officer":
+        messages.error(request, "You are not authorized to view this page.")
+        return redirect("home")
+
+    try:
+        officer = Officer.objects.get(user_id=request.user)
+        # print(officer,"AFSssdfsdfsdsfd")
+    except Officer.DoesNotExist:
+        messages.error(request, "Officer profile not found.")
+        return redirect("home")
+
+    complaints = Complaint.objects.filter(
+        assigned_officer=officer
+    ).order_by("-created_at")
+    return render(
+        request,
+        "complaint/view_complaints.html",
+        {"complaints": complaints}
     )
