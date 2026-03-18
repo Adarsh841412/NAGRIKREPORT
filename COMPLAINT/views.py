@@ -6,6 +6,8 @@ from .models import Complaint
 from ACCOUNT.models import Officer
 from .models import Complaint, ComplaintMedia
 from DEPARTMENT.models import Category
+from django.shortcuts import get_object_or_404, redirect
+
 
 
 @login_required(login_url='login')
@@ -149,15 +151,6 @@ def my_complaints(request):
     )
 
 
-
-
-# from django.shortcuts import render, redirect
-# from django.contrib import messages
-# from django.contrib.auth.decorators import login_required
-# from ACCOUNT.models import Officer
-# from .models import Complaint
-
-
 @login_required(login_url="login")
 def view_complaint_officer(request):
 
@@ -180,3 +173,70 @@ def view_complaint_officer(request):
         "complaint/view_complaints.html",
         {"complaints": complaints}
     )
+
+
+@login_required(login_url="login")
+def start_complaint_work(request, complaint_id):
+    if request.method != "POST":
+        messages.error(request, "Invalid request method.")
+        return redirect("view_complaint_officer")
+
+    if request.user.role != "officer":
+        messages.error(request, "You are not authorized to perform this action.")
+        return redirect("home")
+
+    try:
+        officer = Officer.objects.get(user_id=request.user)
+    except Officer.DoesNotExist:
+        messages.error(request, "Officer profile not found.")
+        return redirect("home")
+
+    complaint = get_object_or_404(
+        Complaint,
+        id=complaint_id,
+        assigned_officer=officer
+    )
+
+    if complaint.status != "pending":
+        messages.error(request, "Only pending complaints can be started.")
+        return redirect("view_complaint_officer")
+
+    complaint.status = "in_progress"
+    complaint.save()
+
+    messages.success(request, "Complaint marked as In Progress.")
+    return redirect("view_complaint_officer")
+
+
+
+@login_required(login_url='login')
+def resolve_complaint_work(request, complaint_id):
+    if request.method != 'POST':
+        messages.error(request, "Invalid request method.")
+        return redirect('view_complaint_officer')
+
+    if request.user.role != "officer":
+        messages.error(request, "You are not an authorized person.")
+        return redirect("home")
+
+    try:
+        officer = Officer.objects.get(user_id=request.user)
+    except Officer.DoesNotExist:
+        messages.error(request, "Officer profile not found.")
+        return redirect("home")
+
+    complaint = get_object_or_404(
+        Complaint,
+        id=complaint_id,
+        assigned_officer=officer
+    )
+
+    if complaint.status != "in_progress":
+        messages.error(request, "Only in-progress complaints can be resolved.")
+        return redirect("view_complaint_officer")
+
+    complaint.status = "resolved"
+    complaint.save()
+
+    messages.success(request, "Complaint resolved successfully.")
+    return redirect("view_complaint_officer")
