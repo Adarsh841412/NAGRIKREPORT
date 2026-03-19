@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Profile</title>
+    <link rel="stylesheet" href="{% static 'account/css/officer_profile.css' %}">
+</head>
+<body>
+
+<div class="profile-page">
+
+    <div class="top-bar">
+        <div>
+            <h1>Officer Profile</h1>
+            <p>View and manage your profile details</p>
+        </div>
+        <a href="{% url 'officer_page' %}" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    <div class="profile-wrapper">
+
+        <div class="profile-card">
+            <div class="profile-image-box">
+                {% if officer.user_id.profile_picture.url %}
+                    <img src="{{ officer.user_id.profile_picture.url }}" alt="Profile Image" class="profile-image">
+                {% else %}
+                    <div class="avatar-placeholder">
+                        {{ request.user.username|slice:":1"|upper }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <h2>{{ request.user.first_name }} {{ request.user.last_name }}</h2>
+            <p class="designation">{{ officer.designation }}</p>
+            <span class="badge">Officer</span>
+        </div>
+
+        <div class="details-card">
+            <h3>Profile Details</h3>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="label">Username</span>
+                    <span class="value">{{ request.user.username }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Email</span>
+                    <span class="value">{{ request.user.email }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Phone Number</span>
+                    <span class="value">{{ request.user.mobile_number }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Department</span>
+                    <span class="value">{{ officer.department.department_name }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Designation</span>
+                    <span class="value">{{ officer.designation }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Assigned Date</span>
+                    <span class="value">{{ officer.assigned_date }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Landmark</span>
+                    <span class="value">{{ officer.landmark }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Latitude</span>
+                    <span class="value">{{ officer.lat }}</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="label">Longitude</span>
+                    <span class="value">{{ officer.lon }}</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{% url 'update_profile_officer'  %}" class="edit-btn">Edit Profile</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

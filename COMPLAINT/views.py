@@ -112,7 +112,7 @@ def create_complaint(request):
                 )
 
             messages.success(request, "Complaint submitted successfully.")
-            return redirect("home")
+            return redirect("my_complaints")
 
         except ValidationError as e:
             if hasattr(e, "message_dict"):
@@ -240,3 +240,40 @@ def resolve_complaint_work(request, complaint_id):
 
     messages.success(request, "Complaint resolved successfully.")
     return redirect("view_complaint_officer")
+
+
+
+
+
+@login_required(login_url='login')
+def reject_complaint_work(request, complaint_id):
+    print("i am adarsh")
+    if request.method != 'POST':
+        messages.error(request, "Invalid request method.")
+        return redirect('view_complaint_officer')
+
+    if request.user.role != "officer":
+        messages.error(request, "You are not an authorized person.")
+        return redirect("home")
+
+    try:
+        officer = Officer.objects.get(user_id=request.user)
+    except Officer.DoesNotExist:
+        messages.error(request, "Officer profile not found.")
+        return redirect("home")
+
+    complaint = get_object_or_404(
+        Complaint,
+        id=complaint_id,
+        assigned_officer=officer
+    )
+
+    if complaint.status == "resolved":
+        messages.error(request, "Only progress or not start complaints can be reject.")
+        return redirect("view_complaint_officer")
+
+    complaint.status = "invalid"
+    complaint.save()
+
+    messages.success(request, "Complaint reject successfully.")
+    return redirect("view_complaint_officer")    

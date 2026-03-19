@@ -1,159 +1,115 @@
-```django-html
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Officer Dashboard</title>
-
-<link rel="stylesheet" href="{% static 'account/css/dashboard.css' %}">
-
-<style>
-/* 🔴 Popup styling */
-.popup {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    padding: 20px;
-    width: 260px;
-
-    display: none;
-    z-index: 1000;
-}
-
-.popup-box h3 {
-    margin-bottom: 8px;
-    font-size: 18px;
-}
-
-.popup-box p {
-    font-size: 14px;
-    color: #555;
-}
-
-.popup-actions {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-}
-
-.confirm-btn {
-    background: #dc3545;
-    color: white;
-    padding: 6px 12px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-.cancel-btn {
-    background: #6c757d;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-}
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Dashboard</title>
+    <link rel="stylesheet" href="{% static 'account/css/officerDashboard.css' %}">
 </head>
-
 <body>
 
-<div class="dashboard">
+<div class="dashboard-shell">
 
-    <div class="navbar">
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
 
-        <h2>Nagrik Report</h2>
+    <header class="topbar">
+        <div class="brand-block">
+            <div class="brand-icon">NR</div>
+            <div>
+                <h1>Nagrik Report</h1>
+                <p>Officer Control Panel</p>
+            </div>
+        </div>
 
-        <div class="nav-right">
+        <div class="topbar-right">
+            <div class="welcome-chip">
+                <span class="welcome-label">Welcome Officer</span>
+                <span class="welcome-name">{{ request.user.username }}</span>
+            </div>
 
-            <span>
-                Welcome Officer <b>{{request.user.username}}</b>
-            </span>
-
-            <!-- 🔥 Logout button -->
             <a href="#" class="logout-btn" onclick="openLogoutPopup(); return false;">
                 Logout
             </a>
 
-            <!-- 🔴 Popup -->
             <div id="logoutPopup" class="popup">
                 <div class="popup-box">
-                    <h3>Are you sure?</h3>
-                    <p>You want to logout</p>
+                    <h3>Logout Session?</h3>
+                    <p>You are about to leave your officer dashboard.</p>
 
                     <div class="popup-actions">
-                        <a href="{% url 'logout' %}" class="confirm-btn">Yes</a>
-                        <button onclick="closeLogoutPopup()" class="cancel-btn">No</button>
+                        <a href="{% url 'logout' %}" class="confirm-btn">Yes, Logout</a>
+                        <button type="button" onclick="closeLogoutPopup()" class="cancel-btn">Stay Here</button>
                     </div>
                 </div>
             </div>
-
         </div>
+    </header>
 
-    </div>
-
-
-    <div class="cards">
-
-        <div class="card">
-
-            <h3>View Complaints</h3>
-
+    <section class="hero-section">
+        <div class="hero-left">
+            <span class="hero-badge">Dashboard Overview</span>
+            <h2>Manage assigned complaints with speed and clarity</h2>
             <p>
-                See complaints assigned to your department
+                Review complaints, update their progress, and keep your department workflow smooth and organized.
             </p>
-
-            <a href="{% url 'view_complaint_officer' %}" class="btn">
-                Open
-            </a>
-
         </div>
 
+        <div class="hero-stats">
+            <div class="stat-card">
+                <h3>{{context.total}}</h3>
+                <p>Total Assigned</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{context.pending}}</h3>
+                <p>Pending</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{context.in_progress}}</h3>
+                <p>In Progress</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{context.resolve}}</h3>
+                <p>Resolved</p>
+            </div>
+        </div>
+    </section>
 
-        <div class="card">
-
-            <h3>Update Status</h3>
-
-            <p>
-                Change complaint progress and resolution
-            </p>
-
-            <a href="#" class="btn">
-                Update
-            </a>
-
+    <section class="action-section">
+        <div class="section-head">
+            <h3>Quick Actions</h3>
+            <p>Choose what you want to manage next</p>
         </div>
 
+        <div class="cards">
 
-        <div class="card">
+            <div class="card card-one">
+                <div class="card-icon">📂</div>
+                <h3>View Complaints</h3>
+                <p>See complaints assigned to your department and inspect their complete details.</p>
+                <a href="{% url 'view_complaint_officer' %}" class="btn">Open</a>
+            </div>
 
-            <h3>Profile</h3>
+            <div class="card card-two">
+                <div class="card-icon">⚡</div>
+                <h3>Update Status</h3>
+                <p>Move complaints from pending to in-progress, resolved, or invalid state.</p>
+                <a href="#" class="btn">Update</a>
+            </div>
 
-            <p>
-                View your officer details
-            </p>
-
-            <a href="#" class="btn">
-                View
-            </a>
+            <div class="card card-three">
+                <div class="card-icon">👤</div>
+                <h3>Profile</h3>
+                <p>Check your officer details, department assignment, and profile information.</p>
+                <a href="{% url 'view_profile_officer' %}" class="btn">View</a>
+            </div>
 
         </div>
-
-    </div>
+    </section>
 
 </div>
-
 
 <script>
 function openLogoutPopup() {
@@ -164,18 +120,19 @@ function closeLogoutPopup() {
     document.getElementById("logoutPopup").style.display = "none";
 }
 
-// outside click close
 window.onclick = function(event) {
     const popup = document.getElementById("logoutPopup");
     const btn = document.querySelector(".logout-btn");
 
-    if (popup.style.display === "block" && 
-        !popup.contains(event.target) && 
-        event.target !== btn) {
+    if (
+        popup.style.display === "block" &&
+        !popup.contains(event.target) &&
+        event.target !== btn
+    ) {
         popup.style.display = "none";
     }
-}
+};
 </script>
 
 </body>
-</html> 
+</html>

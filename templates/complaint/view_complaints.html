@@ -43,6 +43,7 @@
                             {% if complaint.status == 'pending' %}pending-fill
                             {% elif complaint.status == 'in_progress' %}progress-fill
                             {% elif complaint.status == 'resolved' %}resolved-fill
+                            {% elif complaint.status == 'invalid'%}invalid-fill 
                             {% else %}pending-fill{% endif %}">
                         </div>
                     </div>
@@ -121,8 +122,12 @@
                         <button type="submit" class="btn resolve">Resolve</button>
                     </form>
                     {% endif %}
-                    {% if complaint.status != "resolved" %}
-                        <button class="btn reject">Reject</button>
+                    {% if complaint.status != "resolved"  and complaint.status != "invalid"%}
+                        <form method="post" action="{% url 'reject_complaint_work' complaint.id %}">
+                         {% csrf_token%}
+                          <button class="btn reject">Reject</button>
+                        </form>    
+                       
                     {% endif %}    
                 </div>
 

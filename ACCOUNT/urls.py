@@ -15,7 +15,11 @@ urlpatterns = [
     path('officerpage/',views.OfficerPage,name="officer_page"),
     path("logout/",views.logout_view,name="logout"),
     path("user_profile/",views.user_profile,name="user_profile"),
-    path("edit-profile/", views.edit_profile_citizen, name="edit_profile_citizen"),
+    path("edit-user-profile/", views.edit_profile_citizen, name="edit_profile_citizen"),
+
+    path('officer-profile/',views.view_profile_officer, name="view_profile_officer"),
+    path('update-officer-profile/',views.update_profile_officer,name="update_profile_officer")
+
 
 
 ]

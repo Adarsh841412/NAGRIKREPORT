@@ -365,11 +365,35 @@ def Officerlogin(request):
 # * officer login come to this dashboard 
 @login_required(login_url='officer_login')
 def OfficerPage(request):
+    officer = Officer.objects.filter(user_id=request.user).first() 
+  
+    complain = officer.assigned_complaints.all()
+    total_complain = complain.count() 
+    in_progress = 0 
+    pending = 0 
+    resolve = 0 
+    
+    for comp in complain:
+        if comp.status == 'resolved':
+            resolve+=1 
+        if comp.status == 'pending':
+            pending+=1 
+        if comp.status == 'in_progress':
+            in_progress+=1 
+        if comp.status == 'invalid':
+            pending+=1       
+    
+    # print("resolve",resolve)
+    # print("pending",pending)
+    # print("total_complain",total_complain)
+    # print("in_progress",in_progress)
+
+    context={"resolve":resolve,"total":total_complain,"pending":pending,"in_progress":in_progress}
 
     if request.user.role != "officer":
         return redirect("login")
 
-    return render(request,"account/officer_dashboard.html")
+    return render(request,"account/officer_dashboard.html",{"context":context})
 
 
 
@@ -377,11 +401,30 @@ def OfficerPage(request):
 
 @login_required(login_url='login')
 def citizen_dashboard(request):
+    user = UserModel.objects.filter(id=request.user.id).first() 
+  
+    complain = user.complaints.all()
+    total_complain = complain.count() 
+    in_progress = 0 
+    pending = 0 
+    resolve = 0 
+    
+    for comp in complain:
+        if comp.status == 'resolved':
+            resolve+=1 
+        if comp.status == 'pending':
+            pending+=1 
+        if comp.status == 'in_progress':
+            in_progress+=1 
+        if comp.status == 'invalid':
+            pending+=1  
+    context={"resolve":resolve,"total":total_complain,"pending":pending,"in_progress":in_progress}
 
+       
     if request.user.role != "citizen":
         return redirect("officer_login")
 
-    return render(request,"account/citizen_dashboard.html")
+    return render(request,"account/citizen_dashboard.html",{'context':context})
 
 
 
@@ -411,7 +454,7 @@ def logout_view(request):
 
 
 # * making user profile page 
-
+# @login_required(login_url='login')
 def user_profile(request):
    if request.user.is_authenticated:
     # user = UserModel.objects.get(id=request.user.id)
@@ -421,10 +464,6 @@ def user_profile(request):
 
 # * edit profile citizen 
 
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import UserModel
 
 
 @login_required(login_url='login')
@@ -497,6 +536,47 @@ def edit_profile_citizen(request):
 
 
 
+@login_required(login_url='officer_login')
+def view_profile_officer(request):
+    
+    try:
+        officer = Officer.objects.get(user_id=request.user)
+    except Officer.DoesNotExist:
+        messages.error(request, "Officer profile not found.")
+        return redirect("officer_page")
+
+    return render(request, "account/officer_profile.html", {"officer": officer})
+
+
+
+
+@login_required(login_url='officer_login')
+def update_profile_officer(request):
+    try:
+        officer = Officer.objects.get(user_id=request.user)
+    except Officer.DoesNotExist:
+        messages.error(request, "Officer profile not found.")
+        return redirect('officer_page')
+
+    if request.method == "POST":
+        request.user.first_name = request.POST.get("first_name")
+        request.user.last_name = request.POST.get("last_name")
+        request.user.email = request.POST.get("email")
+        request.user.mobile_number = request.POST.get("mobile_number")
+
+        officer.designation = request.POST.get("designation")
+        officer.landmark = request.POST.get("landmark")
+
+        request.user.save()
+        officer.save()
+
+        messages.success(request, "Profile updated successfully.")
+        return redirect("view_profile_officer")
+
+    context = {
+        "officer": officer
+    }
+    return render(request, "account/edit_officer_profile.html", context)
 
 
 

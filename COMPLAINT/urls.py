@@ -15,4 +15,10 @@ urlpatterns = [
         views.resolve_complaint_work,
         name="resolve_complaint_work"
     ),
+    path(
+        "officer/complaint/<int:complaint_id>/reject",
+        views.reject_complaint_work,
+        name="reject_complaint_work"
+
+        )
 ]

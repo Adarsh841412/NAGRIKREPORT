@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Officer Profile</title>
+    <link rel="stylesheet" href="{% static 'account/css/edit_officer_profile.css' %}">
+</head>
+<body>
+
+<div class="edit-page">
+    <div class="top-bar">
+        <div>
+            <h1>Edit Officer Profile</h1>
+            <p>Update your personal and officer information</p>
+        </div>
+        <a href="{% url 'view_profile_officer' %}" class="back-btn">← Back to Profile</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            {% csrf_token %}
+
+            <h3>Personal Information</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" name="first_name" value="{{ request.user.first_name }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" name="last_name" value="{{ request.user.last_name }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" value="{{ request.user.username }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ request.user.email }}">
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="text" name="mobile_number" value="{{ request.user.mobile_number }}">
+                </div>
+            </div>
+
+            <h3>Officer Information</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" value="{{ officer.department.department_name }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Designation</label>
+                    <input type="text" name="designation" value="{{ officer.designation }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Assigned Date</label>
+                    <input type="text" value="{{ officer.assigned_date }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Landmark</label>
+                    <input type="text" name="landmark" value="{{ officer.landmark }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Latitude</label>
+                    <input type="text" value="{{ officer.lat }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Longitude</label>
+                    <input type="text" value="{{ officer.lon }}" readonly>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
