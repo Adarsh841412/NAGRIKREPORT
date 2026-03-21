@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complaint Detail</title>
+<link rel="stylesheet" href="{% static 'complaint/css/complaint_detail.css' %}?{% now 'U' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h2>Complaint Detail</h2>
+        <a href="{% url 'my_complaints' %}" class="back-btn">← Back</a>
+    </div>
+
+    <!-- SINGLE COMPLAINT -->
+    <div class="complaint-card">
+
+        <div class="card-header">
+            <h3>{{ complaint.title }}</h3>
+            <span class="status status-{{ complaint.status }}">
+                {{ complaint.get_status_display }}
+            </span>
+        </div>
+
+        <p class="description">{{ complaint.description }}</p>
+
+        <div class="details">
+            <p><strong>Category:</strong> {{ complaint.category.category_name }}</p>
+            <p><strong>Priority:</strong> {{ complaint.get_priority_display }}</p>
+            <p><strong>Address:</strong> {{ complaint.location_address }}</p>
+            <p><strong>Latitude:</strong> {{ complaint.latitude }}</p>
+            <p><strong>Longitude:</strong> {{ complaint.longitude }}</p>
+            <p><strong>Created At:</strong> {{ complaint.created_at }}</p>
+        </div>
+
+        {% if complaint.media_files.exists %}
+        <div class="media-section">
+            <h4>Uploaded Media</h4>
+
+            <div class="media-grid">
+                {% for media in complaint.media_files.all %}
+                    <div class="media-card">
+
+                        {% if media.media_type == "image" %}
+                            <img src="{{ media.media_file.url }}" alt="Complaint Image">
+                        {% elif media.media_type == "video" %}
+                            <video controls>
+                                <source src="{{ media.media_file.url }}">
+                            </video>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

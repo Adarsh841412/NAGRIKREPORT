@@ -19,6 +19,111 @@
     {% if complaints %}
         <div class="complaint-list">
             {% for complaint in complaints %}
+
+                <a href="{% url 'complaint_detail' complaint.id %}" class="card-link">
+                    <div class="complaint-card">
+
+                        <div class="card-header">
+                            <h3>{{ complaint.title }}</h3>
+                            <span class="status status-{{ complaint.status }}">
+                                {{ complaint.get_status_display }}
+                            </span>
+                        </div>
+
+                        <p class="description">
+                            {{ complaint.description|truncatechars:180 }}
+                        </p>
+
+                    </div>
+                </a>
+
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-box">
+            <h3>No complaints found</h3>
+            <p>You have not submitted any complaints yet.</p>
+            <a href="{% url 'create_complaint' %}" class="create-btn">Create Complaint</a>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Complaints</title>
+<link rel="stylesheet" href="{% static 'complaint/css/my_complaints.css' %}?{% now 'U' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="top-bar">
+        <h2>My Complaints</h2>
+        <a href="{% url 'home' %}" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    {% if complaints %}
+        <div class="complaint-list">
+            {% for complaint in complaints %}
                 <div class="complaint-card">
 
                     <div class="card-header">
@@ -75,4 +180,4 @@
 </div>
 
 </body>
-</html>
+</html> {% endcomment %}

@@ -277,3 +277,23 @@ def reject_complaint_work(request, complaint_id):
 
     messages.success(request, "Complaint reject successfully.")
     return redirect("view_complaint_officer")    
+
+
+
+
+
+@login_required(login_url='login')
+def complaint_detail(request, id):
+
+    try:
+        complaint = Complaint.objects.get(id=id, user=request.user)
+    except Complaint.DoesNotExist:
+        return redirect("my_complaints")
+
+    return render(
+        request,
+        "complaint/complaint_detail.html",
+        {
+            "complaint": complaint
+        }
+    )
