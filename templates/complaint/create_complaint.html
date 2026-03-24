@@ -2,121 +2,332 @@
 {% load static %}
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create Complaint</title>
-<link rel="stylesheet" href="{% static 'complaint/css/create_complaint.css' %}?{% now 'U' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Complaint</title>
+
+    <link rel="stylesheet" href="{% static 'complaint/css/create_complaint.css' %}?{% now 'U' %}">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
 </head>
 <body>
 
-<div class="container">
+<div class="page-wrapper">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
 
-    <form method="POST" enctype="multipart/form-data" class="complaint-form">
-        {% csrf_token %}
+    <div class="container">
+        <div class="complaint-card">
 
-        <h2>Create Complaint</h2>
-        <p class="subtitle">Report an issue in your area</p>
+            <div class="form-header">
+                <div class="form-badge">Nagrik Report</div>
+                <h1>Create Complaint</h1>
+                <p>Raise an issue with exact location, details, and supporting media.</p>
+            </div>
 
-        {% if errors.general %}
-        <div class="error-box">
-            {{ errors.general }}
+            {% if errors.general %}
+            <div class="error-box">
+                {{ errors.general }}
+            </div>
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" class="complaint-form">
+                {% csrf_token %}
+
+                <div class="form-grid">
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select name="category" id="category" class="{% if errors.category %}input-error{% endif %}">
+                            <option value="">Select Category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if request.POST.category == category.id|stringformat:"s" %}selected{% endif %}>
+                                {{ category.category_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if errors.category %}
+                        <div class="error">{{ errors.category }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Priority -->
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select name="priority" id="priority" class="{% if errors.priority %}input-error{% endif %}">
+                            <option value="">Select Priority</option>
+                            <option value="low" {% if request.POST.priority == "low" %}selected{% endif %}>Low</option>
+                            <option value="medium" {% if request.POST.priority == "medium" %}selected{% endif %}>Medium</option>
+                            <option value="high" {% if request.POST.priority == "high" %}selected{% endif %}>High</option>
+                        </select>
+                        {% if errors.priority %}
+                        <div class="error">{{ errors.priority }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Title -->
+                    <div class="form-group full-width">
+                        <label for="title">Complaint Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="Enter short and clear complaint title"
+                            value="{{ request.POST.title }}"
+                            class="{% if errors.title %}input-error{% endif %}"
+                        >
+                        {% if errors.title %}
+                        <div class="error">{{ errors.title }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            placeholder="Describe the issue in detail..."
+                            class="{% if errors.description %}input-error{% endif %}"
+                        >{{ request.POST.description }}</textarea>
+                        {% if errors.description %}
+                        <div class="error">{{ errors.description }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Location Section -->
+                <div class="section-card">
+                    <div class="section-head">
+                        <h2>Complaint Location</h2>
+                        <p>Select the exact location from map or use your current location.</p>
+                    </div>
+
+                    <button type="button" class="location-btn" onclick="getCurrentLocation()">
+                        📍 Use My Current Location
+                    </button>
+
+                    <div id="map"></div>
+
+                    <div class="location-grid">
+                        <div class="form-group address-group">
+                            <label for="location_address">Location Address</label>
+                            <input
+                                type="text"
+                                id="location_address"
+                                name="location_address"
+                                placeholder="Selected address will appear here"
+                                value="{{ request.POST.location_address }}"
+                                readonly
+                                class="{% if errors.location_address %}input-error{% endif %}"
+                            >
+                            {% if errors.location_address %}
+                            <div class="error">{{ errors.location_address }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="latitude">Latitude</label>
+                            <input
+                                type="text"
+                                id="latitude"
+                                name="latitude"
+                                placeholder="Latitude"
+                                value="{{ request.POST.latitude }}"
+                                readonly
+                                class="{% if errors.latitude %}input-error{% endif %}"
+                            >
+                            {% if errors.latitude %}
+                            <div class="error">{{ errors.latitude }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="longitude">Longitude</label>
+                            <input
+                                type="text"
+                                id="longitude"
+                                name="longitude"
+                                placeholder="Longitude"
+                                value="{{ request.POST.longitude }}"
+                                readonly
+                                class="{% if errors.longitude %}input-error{% endif %}"
+                            >
+                            {% if errors.longitude %}
+                            <div class="error">{{ errors.longitude }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Upload -->
+                <div class="section-card">
+                    <div class="section-head">
+                        <h2>Upload Supporting Media</h2>
+                        <p>Add images or videos as proof of the issue.</p>
+                    </div>
+
+                    <div class="upload-box {% if errors.media_files %}input-error{% endif %}">
+                        <label for="media_files" class="upload-label">
+                            <span class="upload-icon">⬆</span>
+                            <span class="upload-text">Choose image / video files</span>
+                            <span class="upload-subtext">PNG, JPG, WEBP, MP4, WEBM, OGG, MOV</span>
+                        </label>
+                        <input
+                            type="file"
+                            id="media_files"
+                            name="media_files"
+                            multiple
+                            accept="image/*,video/*"
+                        >
+                        <p id="file-name" class="file-name-text">No file selected</p>
+                    </div>
+
+                    {% if errors.media_files %}
+                    <div class="error">{{ errors.media_files }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="action-row">
+                    <a href="{% url 'home' %}" class="back-link">← Back to Dashboard</a>
+                    <button type="submit" class="submit-btn">Submit Complaint</button>
+                </div>
+            </form>
         </div>
-        {% endif %}
-
-        <select name="category" class="{% if errors.category %}input-error{% endif %}">
-            <option value="">Select Category</option>
-            {% for category in categories %}
-            <option value="{{ category.id }}" {% if request.POST.category == category.id|stringformat:"s" %}selected{% endif %}>
-                {{ category.category_name }}
-            </option>
-            {% endfor %}
-        </select>
-        {% if errors.category %}
-        <div class="error">{{ errors.category }}</div>
-        {% endif %}
-
-        <input
-            type="text"
-            name="title"
-            placeholder="Complaint Title"
-            value="{{ request.POST.title }}"
-            class="{% if errors.title %}input-error{% endif %}"
-        >
-        {% if errors.title %}
-        <div class="error">{{ errors.title }}</div>
-        {% endif %}
-
-        <textarea
-            name="description"
-            placeholder="Describe the issue"
-            class="{% if errors.description %}input-error{% endif %}"
-        >{{ request.POST.description }}</textarea>
-        {% if errors.description %}
-        <div class="error">{{ errors.description }}</div>
-        {% endif %}
-
-        <input
-            type="text"
-            name="location_address"
-            placeholder="Location Address"
-            value="{{ request.POST.location_address }}"
-            class="{% if errors.location_address %}input-error{% endif %}"
-        >
-        {% if errors.location_address %}
-        <div class="error">{{ errors.location_address }}</div>
-        {% endif %}
-
-        <input
-            type="text"
-            name="latitude"
-            placeholder="Latitude"
-            value="{{ request.POST.latitude }}"
-            class="{% if errors.latitude %}input-error{% endif %}"
-        >
-        {% if errors.latitude %}
-        <div class="error">{{ errors.latitude }}</div>
-        {% endif %}
-
-        <input
-            type="text"
-            name="longitude"
-            placeholder="Longitude"
-            value="{{ request.POST.longitude }}"
-            class="{% if errors.longitude %}input-error{% endif %}"
-        >
-        {% if errors.longitude %}
-        <div class="error">{{ errors.longitude }}</div>
-        {% endif %}
-
-        <select name="priority" class="{% if errors.priority %}input-error{% endif %}">
-            <option value="">Select Priority</option>
-            <option value="low" {% if request.POST.priority == "low" %}selected{% endif %}>Low</option>
-            <option value="medium" {% if request.POST.priority == "medium" %}selected{% endif %}>Medium</option>
-            <option value="high" {% if request.POST.priority == "high" %}selected{% endif %}>High</option>
-        </select>
-        {% if errors.priority %}
-        <div class="error">{{ errors.priority }}</div>
-        {% endif %}
-
-        <label class="file-label">Upload Image / Video</label>
-        <input
-            type="file"
-            name="media_files"
-            multiple
-            accept="image/*,video/*"
-            class="{% if errors.media_files %}input-error{% endif %}"
-        >
-        {% if errors.media_files %}
-        <div class="error">{{ errors.media_files }}</div>
-        {% endif %}
-
-        <button type="submit">Submit Complaint</button>
-
-        <a href="{% url 'home' %}" class="back-link">← Back to Dashboard</a>
-
-    </form>
-
+    </div>
 </div>
+
+<!-- Leaflet JS -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+
+<script>
+    let initialLat = 23.0225;
+    let initialLng = 72.5714;
+    let zoomLevel = 13;
+
+    const latInput = document.getElementById("latitude");
+    const lngInput = document.getElementById("longitude");
+    const addressInput = document.getElementById("location_address");
+    const form = document.querySelector(".complaint-form");
+
+    if (latInput.value && lngInput.value) {
+        initialLat = parseFloat(latInput.value);
+        initialLng = parseFloat(lngInput.value);
+        zoomLevel = 15;
+    }
+
+    const map = L.map("map").setView([initialLat, initialLng], zoomLevel);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    let marker = null;
+
+    if (latInput.value && lngInput.value) {
+        marker = L.marker([initialLat, initialLng]).addTo(map);
+    }
+
+    function setMarker(lat, lng) {
+        if (marker) {
+            marker.setLatLng([lat, lng]);
+        } else {
+            marker = L.marker([lat, lng]).addTo(map);
+        }
+
+        latInput.value = lat.toFixed(6);
+        lngInput.value = lng.toFixed(6);
+        map.setView([lat, lng], 16);
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.display_name) {
+                    addressInput.value = data.display_name;
+                } else {
+                    addressInput.value = "";
+                }
+            })
+            .catch(error => {
+                console.error("Reverse geocoding error:", error);
+                addressInput.value = "";
+            });
+    }
+
+    map.on("click", function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        setMarker(lat, lng);
+    });
+
+ 
+function getCurrentLocation() {
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            setMarker(lat, lng);
+        },
+        function(error) {
+            console.error(error);
+            alert("Unable to fetch your location.");
+        }
+    );
+}
+
+
+    form.addEventListener("submit", function(e) {
+        if (!latInput.value || !lngInput.value || !addressInput.value) {
+            e.preventDefault();
+            alert("Please select a valid location from the map.");
+        }
+    });
+</script>
+
+
+<script>
+    const fileInput = document.getElementById("media_files");
+    const fileNameText = document.getElementById("file-name");
+
+    fileInput.addEventListener("change", function () {
+        if (this.files.length > 0) {
+            if (this.files.length === 1) {
+                fileNameText.textContent = "Selected: " + this.files[0].name;
+            } else {
+                fileNameText.textContent = `${this.files.length} files selected`;
+            }
+        } else {
+            fileNameText.textContent = "No file selected";
+        }
+    });
+</script>
+
+
+
 
 </body>
 </html>
