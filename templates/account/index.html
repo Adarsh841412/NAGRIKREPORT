@@ -3,86 +3,141 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Nagrik Report</title>
 
 <link rel="stylesheet" href="{% static 'account/css/index.css'%}?{% now 'U' %}">
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-<!-- floating particles -->
-<div class="particles"></div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">Nagrik Report</div>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+    </div>
+</nav>
 
-<div class="container">
+<!-- HERO -->
+<section class="hero">
 
-<h1>Nagrik Report</h1>
+    <h1>Smart Complaint System for Citizens</h1>
 
-<p class="subtitle">
-Smart Citizen Complaint System
-</p>
+    <p class="hero-desc">
+        Nagrik Report is a modern platform that empowers citizens to report real-world issues
+        like road damage, garbage, water leakage, and more — while ensuring fast and transparent
+        resolution through government departments.
+    </p>
 
-<h3>Select Your Role</h3>
+    <a href="#role-section" class="cta-btn">Get Started →</a>
 
-<form method="post">
+</section>
 
-{% csrf_token %}
+<!-- FEATURES -->
+<section class="features" id="features">
 
-<label class="role-card">
+    <h2>Why Nagrik Report?</h2>
 
-<input type="radio" name="role" value="citizen">
+    <div class="feature-cards">
 
-<div class="card-content">
+        <div class="feature">
+            <h3>Smart Routing</h3>
+            <p>Automatically sends complaints to the correct department.</p>
+        </div>
 
-<div class="icon">
-👤
-</div>
+        <div class="feature">
+            <h3> Real-time Tracking</h3>
+            <p>Track complaint status from submission to resolution.</p>
+        </div>
 
-<h4>Citizen</h4>
+        <div class="feature">
+            <h3> Role-Based System</h3>
+            <p>Separate dashboards for Citizens, Officers, and Admin.</p>
+        </div>
 
-<p>Register complaints & track progress</p>
+        <div class="feature">
+            <h3> Media Upload</h3>
+            <p>Upload images/videos as proof for better action.</p>
+        </div>
 
-</div>
+    </div>
 
-</label>
+</section>
 
 
-<label class="role-card">
 
-<input type="radio" name="role" value="officer">
 
-<div class="card-content">
 
-<div class="icon">
-🛡️
-</div>
+<!-- ROLE SECTION -->
+<section class="role-section" id="role-section">
 
-<h4>Officer</h4>
+    <h2>Select Your Role</h2>
 
-<p>Manage and resolve complaints</p>
+    <form method="post">
+        {% csrf_token %}
 
-</div>
+        <div class="roles">
 
-</label>
+            <label class="role-card">
+                <input type="radio" name="role" value="citizen">
+                <div class="card-content">
+                    <div class="icon"></div>
+                    <h4>Citizen</h4>
+                    <p>Report issues & track progress</p>
+                </div>
+            </label>
 
-<button type="submit">
-Continue →
-</button>
+            <label class="role-card">
+                <input type="radio" name="role" value="officer">
+                <div class="card-content">
+                    <div class="icon"></div>
+                    <h4>Officer</h4>
+                    <p>Manage and resolve complaints</p>
+                </div>
+            </label>
 
-<p class="footer">
-Digital Governance Platform 🚀
-</p>
+        </div>
 
-</form>
+        <button type="submit">Continue →</button>
 
-</div>
+    </form>
+
+</section>
+
+<!-- ABOUT SECTION -->
+<section class="about" id="about">
+
+    <h2>About Nagrik Report</h2>
+
+    <p class="about-text">
+        Nagrik Report is a smart digital governance platform designed to bridge the gap between citizens
+        and government authorities. It allows users to report real-life issues such as road damage,
+        garbage problems, water leakage, and electricity failures with ease.
+    </p>
+
+    <p class="about-text">
+        The system ensures that each complaint is automatically routed to the correct department,
+        enabling faster resolution and accountability. Citizens can track their complaints in real-time,
+        while officers can efficiently manage and resolve issues through a dedicated dashboard.
+    </p>
+
+    <p class="about-text highlight">
+        Our mission is to create a transparent, efficient, and citizen-friendly system for better public service delivery 🚀
+    </p>
+
+</section>
+
+{% comment %} <!-- FOOTER -->
+<footer>
+    <p> Digital Nagrik Platform</p>
+</footer> {% endcomment %}
 
 </body>
-
 </html>

@@ -56,34 +56,34 @@
 
                 <div class="details-grid">
                     <div class="detail-item">
-                        <span class="label">📂 Category</span>
+                        <span class="label"> Category</span>
                         <span class="value">{{ complaint.category.category_name }}</span>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">👤 Citizen</span>
+                        <span class="label"> Citizen</span>
                         <span class="value">{{ complaint.user.username }}</span>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">📍 Location</span>
+                        <span class="label">Location</span>
                         <span class="value">{{ complaint.location_address }}</span>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">🔥 Priority</span>
+                        <span class="label"> Priority</span>
                         <span class="value priority {{ complaint.priority|lower }}">
                             {{ complaint.priority|title }}
                         </span>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">🕒 Created</span>
+                        <span class="label"> Created</span>
                         <span class="value">{{ complaint.created_at }}</span>
                     </div>
 
                     <div class="detail-item">
-                        <span class="label">📌 Status</span>
+                        <span class="label"> Status</span>
                         <span class="value">{{ complaint.get_status_display }}</span>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
             {% endfor %}
             {% else %}
             <div class="no-data-box">
-                <h3>No complaints assigned yet 🚫</h3>
+                <h3>No complaints assigned yet </h3>
                 <p>There are currently no complaints assigned to you.</p>
             </div>
             {% endif %}
